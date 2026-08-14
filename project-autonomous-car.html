@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Autonomous RC Car — Diego Duarte</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="mywebsite.css">
+	</head>
+	<body>
+		<main class="project-detail-page">
+			<nav>
+				<h1><a href="mywebsite.html">Diego's <span>Lab</span></a></h1>
+				<ul>
+					<li><a href="mywebsite.html">Home</a></li>
+					<li><a href="mywebsite.html#projects">Projects</a></li>
+				</ul>
+			</nav>
+
+			<p class="back-row"><a class="back-link" href="mywebsite.html#projects">← Back to projects</a></p>
+
+			<article class="project-detail">
+				<header class="project-detail-header">
+					<h1>Autonomous RC Car</h1>
+					<p class="project-detail-lead">Arduino-based platform with manual wireless control and autonomous obstacle avoidance: differential drive, nRF24L01 link, ultrasonic ranging, and BNO055 quaternion yaw for IMU-assisted scanning and turns.</p>
+					<p class="project-detail-actions">
+						<a class="btn-github" href="https://github.com/d1360g089/Autonomous-Car" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+					</p>
+				</header>
+
+				<figure class="project-detail-figure">
+					<img src="autonomous-car.png" alt="Autonomous RC car with breadboard electronics and handheld joystick transmitter with nRF antenna.">
+				</figure>
+
+				<section>
+					<h2>Overview</h2>
+					<p>This project is an Arduino-based RC car that supports both <strong>manual wireless control</strong> and <strong>basic autonomous navigation</strong>. It integrates DC motors, nRF24L01 wireless modules, an ultrasonic distance sensor, and a BNO055 IMU to explore autonomy, sensor limits, and control on constrained embedded hardware—with emphasis on systems integration and real-time control.</p>
+				</section>
+
+				<section>
+					<h2>Autonomous behavior</h2>
+					<p>In autonomous mode the vehicle drives forward until the ultrasonic sensor sees an obstacle inside a set threshold. It then stops and performs a <strong>360° rotational scan</strong> using <strong>yaw from the BNO055</strong> (quaternion-based, avoiding Euler singularities). Distances are sampled at roughly fixed angular steps (~10°); the firmware picks the direction with the most clearance, rotates to that heading with IMU feedback, then resumes forward motion.</p>
+					<p>Control is a <strong>state-based</strong> flow: forward drive → detect obstacle → scan in place → choose best heading → reorient → drive again. Motors use <strong>PWM differential drive</strong>; turns use opposite wheel speeds.</p>
+				</section>
+
+				<section>
+					<h2>Manual (RC) mode</h2>
+					<p>Joystick axes are sent over <strong>nRF24L01</strong> and mapped to left/right motor speeds for steering—useful for testing motors, latency, and baseline driving before tuning autonomy.</p>
+				</section>
+
+				<section>
+					<h2>IMU and orientation</h2>
+					<ul>
+						<li><strong>Sensor:</strong> BNO055</li>
+						<li><strong>Representation:</strong> Quaternions → yaw for scanning and turns</li>
+						<li><strong>Scope:</strong> Heading only, not full global positioning; drift and noise remain constraints without encoders or richer fusion.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Challenges (from the build)</h2>
+					<ul>
+						<li>Ultrasonic noise from angles and environment</li>
+						<li>IMU yaw drift on long scans</li>
+						<li>No wheel odometry</li>
+						<li>Blocking control sections and Arduino compute limits</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Repository</h2>
+					<p>Firmware includes car-side logic (e.g. <code>AutonomousCar.ino</code>) and transmitter code (<code>Transmitter.ino</code>) for the joystick controller. See the repo for the exact layout.</p>
+				</section>
+
+				<section>
+					<h2>Components</h2>
+					<ul>
+						<li>Arduino Uno (class)</li>
+						<li>BNO055 IMU</li>
+						<li>nRF24L01 modules (TX/RX)</li>
+						<li>Ultrasonic distance sensor</li>
+						<li>DC motors and H-bridge drivers</li>
+						<li>Joystick modules, breadboard, chassis</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Updated: Object Detecting Radar Scanner </h2>
+					<p> To improve obstacle detection and navigation, I mounted an ultrasonic sensor onto a servo motor that performs a 180° sweep around the vehicle. During each sweep, the sensor records the distance to nearby objects at different angles.
+
+Using these measurements in polar coordinates (r,θ), I generated a real-time polar graph that maps detected obstacles as purple points based on their measured distance and angle. I then used a list to identify the minimum recorded distance and its corresponding angle, allowing the system to determine the closest obstacle in the environment. This nearest object is highlighted on the graph as a larger green point that updates continuously with each new scan.
+					</p>
+					<h3>Video</h3>
+					<ul class="external-links">
+					<li><a href="https://www.tiktok.com/@typicalcircuit/video/7627627267455274271" target="_blank" rel="nooperner noreferrer"> Radar Scanning Algorithm </a></li>
+					</ul>
+
+				</section>
+
+				<section>
+					<h2>Demo videos (TikTok)</h2>
+					<p><strong>Manual RC</strong></p>
+					<ul class="external-links">
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7583457047086189855" target="_blank" rel="noopener noreferrer">Manual control clip 1</a></li>
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7581312163025931550" target="_blank" rel="noopener noreferrer">Manual control clip 2</a></li>
+					</ul>
+					<p><strong>Autonomous obstacle avoidance</strong></p>
+					<ul class="external-links">
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7578304480257576222" target="_blank" rel="noopener noreferrer">Autonomous avoidance</a></li>
+
+					</ul>
+				</section>
+			</article>
+		</main>
+	</body>
+</html>

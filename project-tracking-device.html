@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>LoRa GPS Tracking Device — Diego Duarte</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="mywebsite.css">
+	</head>
+	<body>
+		<main class="project-detail-page">
+			<nav>
+				<h1><a href="mywebsite.html">Diego's <span>Lab</span></a></h1>
+				<ul>
+					<li><a href="mywebsite.html">Home</a></li>
+					<li><a href="mywebsite.html#projects">Projects</a></li>
+				</ul>
+			</nav>
+
+			<p class="back-row"><a class="back-link" href="mywebsite.html#projects">← Back to projects</a></p>
+
+			<article class="project-detail">
+				<header class="project-detail-header">
+					<h1>LoRa GPS Tracking Device</h1>
+					<p class="project-detail-lead">Long-range GPS tracking using LoRa (RYLR998), ESP32 firmware, NEO-6M GPS, OLED readout, and Python on the host for serial parsing plus live map views (Flask and Folium).</p>
+					<p class="project-detail-actions">
+						<a class="btn-github" href="https://github.com/d1360g089/Tracking-Device" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+					</p>
+				</header>
+
+				<figure class="project-detail-figure">
+					<img src="tracking-device.png" alt="Breadboard with ESP32, GPS module, OLED showing coordinates and satellite count.">
+				</figure>
+
+				<section>
+					<h2>Overview</h2>
+					<p>A mobile <strong>transmitter</strong> reads live GPS from a <strong>NEO-6M</strong> module, shows it on an <strong>SSD1306 OLED</strong>, and sends latitude/longitude over <strong>LoRa</strong>. A stationary <strong>receiver</strong> bridges LoRa to USB serial; <strong>Python</strong> scripts parse packets and visualize the track on an interactive map (Folium-based refresh and/or a Flask server with live updates).</p>
+				</section>
+
+				<section>
+					<h2>Architecture</h2>
+					<pre class="project-detail-pre">[GPS + ESP32 + OLED]  ─LoRa─►  [ESP32 LoRa receiver]  ─USB─►  [Python + map]</pre>
+				</section>
+
+				<section>
+					<h2>Hardware</h2>
+					<p><strong>Transmitter:</strong> ESP32, NEO-6M GPS, RYLR998 LoRa, SSD1306 OLED.</p>
+					<p><strong>Receiver:</strong> ESP32, RYLR998 LoRa (USB to computer).</p>
+					<p><strong>Host:</strong> Python environment with pyserial, Flask, Folium as needed.</p>
+				</section>
+
+				<section>
+					<h2>Protocol</h2>
+					<ul>
+						<li>Payload format: <code>latitude,longitude</code></li>
+						<li>LoRa: AT-style send (e.g. <code>AT+SEND=2,&lt;length&gt;,&lt;payload&gt;</code>)</li>
+						<li>Receiver prints <code>+RCV</code> lines; Python extracts GPS strings</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Software (repo)</h2>
+					<ul>
+						<li><code>transmitter.ino</code> / <code>receiver.ino</code> — ESP32 firmware (TinyGPS++ on TX)</li>
+						<li><code>tracking.py</code>, <code>folium_tracking.py</code> — mapping / visualization (see README for Flask variants if present)</li>
+					</ul>
+					<p>Configure LoRa addresses (e.g. transmitter vs receiver), serial port (e.g. <code>COM6</code>), and baud (115200) to match your setup.</p>
+				</section>
+
+				<section>
+					<h2>Limitations &amp; future work</h2>
+					<p>No encryption or CRC in the reference design; fixed serial settings; assumes a valid GPS fix before send. Possible improvements: validation, encryption, history storage, and a mobile-friendly UI.</p>
+				</section>
+
+				<section>
+					<h2>Demo (TikTok)</h2>
+					<p>Project photo on TikTok:</p>
+					<ul class="external-links">
+						<li><a href="https://www.tiktok.com/@typicalcircuit/photo/7603894849342934302" target="_blank" rel="noopener noreferrer">TikTok post</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+	</body>
+</html>

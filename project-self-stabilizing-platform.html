@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Self-Stabilizing Platform — Diego Duarte</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="mywebsite.css">
+	</head>
+	<body>
+		<main class="project-detail-page">
+			<nav>
+				<h1><a href="mywebsite.html">Diego's <span>Lab</span></a></h1>
+				<ul>
+					<li><a href="mywebsite.html">Home</a></li>
+					<li><a href="mywebsite.html#projects">Projects</a></li>
+				</ul>
+			</nav>
+
+			<p class="back-row"><a class="back-link" href="mywebsite.html#projects">← Back to projects</a></p>
+
+			<article class="project-detail">
+				<header class="project-detail-header">
+					<h1>Self-Stabilizing Platform</h1>
+					<p class="project-detail-lead">Dual-axis platform with BNO055 sensor fusion, quaternion orientation, PD control, and real-time 3D modeling in VPython.</p>
+					<p class="project-detail-actions">
+						<a class="btn-github" href="https://github.com/d1360g089/Self-Stabilizing-Platform" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+					</p>
+				</header>
+
+				<figure class="project-detail-figure">
+					<img src="platform.PNG" alt="Breadboard with Arduino, 9-axis IMU, and power supply.">
+				</figure>
+
+				<section>
+					<h2>Overview</h2>
+					<p>This project is a dual-axis self-stabilizing platform built using an IMU sensor (BNO055), sensor fusion via complementary and quaternion filters, and PD control. The system models real-time 3D orientation using VPython and explores trade-offs in control design from bang-bang to PID.</p>
+					<p>Using Euler angles introduced gimbal lock and instability due to reliance on trigonometric functions such as arctangent. The project transitioned to quaternion-based orientation, which improved accuracy, eliminated gimbal lock, and enabled smoother rotational tracking—important for responsive real-time 3D modeling in VPython.</p>
+					<p>Real-time orientation was modeled in VPython for interactive 3D visualization from sensor data. On the control side, development moved from a simple constant correction (bang-bang) controller to proportional (P) control. The P controller reduced error but introduced jitter and oscillations at larger angle deviations, so a full PID loop was implemented. After testing, the integral term proved ineffective for this application, and the system was finalized as a <strong>PD (Proportional–Derivative)</strong> controller. The derivative term damped oscillations and improved responsiveness during rapid movements.</p>
+					<p>Through this project: hands-on experience with sensor fusion, quaternion math, control theory, and real-time system modeling—and a foundation for follow-on work such as a self-balancing robot on unstable dynamics.</p>
+				</section>
+
+				<section>
+					<h2>How it works</h2>
+					<ul>
+						<li><strong>Sensor:</strong> BNO055 (gyroscope, accelerometer, magnetometer)</li>
+						<li><strong>Actuators:</strong> Two servo motors for pitch and roll</li>
+						<li><strong>Filtering:</strong> Low-pass and complementary filter for orientation</li>
+						<li><strong>Representation:</strong> Quaternions for smooth motion and accurate data</li>
+						<li><strong>Control:</strong> PD control to keep the platform level</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Repository layout</h2>
+					<ul>
+						<li><code>bno055/bno055.ino</code> — Arduino firmware</li>
+						<li><code>bnodata.py</code> — serial connection and data handling</li>
+						<li><code>sim.py</code> — VPython 3D simulation</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Components</h2>
+					<ul>
+						<li>Arduino Uno</li>
+						<li>BNO055 IMU</li>
+						<li>Two MG996R servo motors</li>
+						<li>Breadboard and jumper wires</li>
+						<li>Servo brackets</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Demo (TikTok)</h2>
+					<p>Videos from the repository README:</p>
+					<ul class="external-links">
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7533027402071559454" target="_blank" rel="noopener noreferrer">TikTok clip 1</a></li>
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7533031997191523614" target="_blank" rel="noopener noreferrer">TikTok clip 2</a></li>
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7534073646386613534" target="_blank" rel="noopener noreferrer">TikTok clip 3</a></li>
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7532276439383657758" target="_blank" rel="noopener noreferrer">TikTok clip 4</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+	</body>
+</html>

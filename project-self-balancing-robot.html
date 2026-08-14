@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Self-Balancing Robot — Diego Duarte</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="mywebsite.css">
+	</head>
+	<body>
+		<main class="project-detail-page">
+			<nav>
+				<h1><a href="mywebsite.html">Diego's <span>Lab</span></a></h1>
+				<ul>
+					<li><a href="mywebsite.html">Home</a></li>
+					<li><a href="mywebsite.html#projects">Projects</a></li>
+				</ul>
+			</nav>
+
+			<p class="back-row"><a class="back-link" href="mywebsite.html#projects">← Back to projects</a></p>
+
+			<article class="project-detail">
+				<header class="project-detail-header">
+					<h1>Self-Balancing Robot</h1>
+					<p class="project-detail-lead">Real-time balance using a BNO055 IMU, PID control, complementary filtering, and quaternion-based orientation on an Arduino Nano with DC motors and a 3D-printed frame.</p>
+					<p class="project-detail-actions">
+						<a class="btn-github" href="https://github.com/d1360g089/Self-Balancing-Robot" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+					</p>
+				</header>
+
+				<figure class="project-detail-figure">
+					<img src="selfBot.jpg" alt="Self-balancing robot with BNO055, motor drivers, motors, and Arduino Nano.">
+				</figure>
+
+				<section>
+					<h2>Overview</h2>
+					<p>This robot explores real-time feedback, sensor fusion, and motion stabilization using minimal hardware: an <strong>Arduino Nano</strong> as the controller, a <strong>BNO055 9-axis IMU</strong> for orientation, and <strong>TT Yellow DC motors</strong> driven by <strong>TB6612FNG</strong> motor drivers. Development started with a cardboard prototype for quick algorithm tests, then moved to a <strong>3D-printed three-level platform</strong> for symmetry, stability, and cleaner mounting.</p>
+					<p>The robot measures tilt continuously; a <strong>PID control loop</strong> computes corrective motor speeds to stay level. Proportional reacts to current error, derivative to rate of tilt, and integral (optional) to accumulated offset—useful on uneven surfaces or after small disturbances. Power comes from a <strong>Li-ion battery</strong> for untethered operation.</p>
+					<p>Tilt was first derived from accelerometer and gyroscope separately, then fused with a <strong>complementary filter</strong> (sufficient without a full Kalman filter for this build). Orientation later used <strong>quaternions</strong> converted to Euler angles for accurate roll and pitch. PID gains were tuned by trial and observation for smooth balancing.</p>
+					<p>To improve controller development and tuning, I designed a custom desktop PID tuning application in Python using PyQt6 and PyQtGraph. The application communicates directly with the Arduino over a serial connection, allowing PID parameters (Kp, Ki, and Kd) and balance setpoints to be adjusted in real time without recompiling or uploading new firmware. This significantly accelerated the tuning process by enabling rapid experimentation and immediate feedback.</p>
+					<p>The software also receives live telemetry from the robot, displaying roll angle, target angle, controller error, and motor output on a continuously updating graph. By visualizing the system's response while modifying controller gains, I was able to analyze overshoot, oscillations, settling time, and overall stability more effectively than through serial monitor output alone. The application additionally includes controls for resetting the controller's integral term and monitoring the robot's state during operation.</p>
+				</section>
+
+				<section>
+					<h2>How it works</h2>
+					<ol>
+						<li><strong>Sensor input:</strong> BNO055 reports orientation; quaternions feed roll/pitch.</li>
+						<li><strong>PID control:</strong> Target roll is 0° (level). Error drives <code>k_p</code>, <code>k_d</code>, and optional <code>k_i</code>.</li>
+						<li><strong>Motor output:</strong> Positive output drives forward, negative backward, zero stops.</li>
+						<li><strong>Loop timing:</strong> Sensor reads and PID updates run each loop (on the order of ~1 ms in the firmware description).</li>
+					</ol>
+				</section>
+
+				<section>
+					<h2>Hardware</h2>
+					<ul>
+						<li>Microcontroller: Arduino Nano</li>
+						<li>IMU: Adafruit BNO055 (9-axis)</li>
+						<li>Motor driver: TB6612FNG</li>
+						<li>Motors: TT Yellow DC motors</li>
+						<li>Power: Li-ion battery</li>
+						<li>Structure: 3D-printed 3-level platform</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>PID Tuning App</h2>
+					<p>Desktop UI built with PyQt6 and PyQtGraph to adjust <code>Kp</code>, <code>Ki</code>, and <code>Kd</code> over serial and watch roll, error, and motor output update in real time.</p>
+					<figure class="project-detail-figure project-detail-figure--compact">
+						<img src="tuningapp.png" alt="App and UI that allows the user to control the Ki, Kp, and Kd parameters and see results in real time.">
+					</figure>
+				</section>
+
+				<section>
+					<h2>Software</h2>
+					<ul>
+						<li>Language: Arduino C/C++</li>
+						<li>Libraries: Adafruit_BNO055, Adafruit_Sensor</li>
+						<li>Serial debugging at 115200 baud</li>
+						<li>PID Tuning App </li>
+					</ul>
+				</section>
+
+
+				<section>
+					<h2>Demo (TikTok)</h2>
+					<p>Videos from the repository README:</p>
+					<ul class="external-links">
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7558269748471926047" target="_blank" rel="noopener noreferrer">TikTok clip 1</a></li>
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7603891446382415134" target="_blank" rel="noopener noreferrer">TikTok clip 2</a></li>
+						<li><a href="https://www.tiktok.com/@typicalcircuit/video/7606834187756211487" target="_blank" rel="noopener noreferrer">TikTok clip 3</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+	</body>
+</html>
